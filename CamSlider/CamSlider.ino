@@ -177,7 +177,7 @@ void loop() {
     display.display();
     while (flag == 1)
     {
-      stepperposition(1);
+      StepperPosition(1);
     }
     XInPoint = stepper1.currentPosition();
   }
@@ -192,7 +192,7 @@ void loop() {
     display.display();
     while (flag == 2)
     {
-      stepperposition(2);
+      StepperPosition(2);
     }
     stepper2.setCurrentPosition(0);
     YInPoint = stepper2.currentPosition();
@@ -208,7 +208,7 @@ void loop() {
     display.display();
     while (flag == 3)
     {
-      stepperposition(1);
+      StepperPosition(1);
       Serial.println(stepper1.currentPosition());
     }
     XOutPoint = stepper1.currentPosition();
@@ -224,7 +224,7 @@ void loop() {
     display.display();
     while (flag == 4)
     {
-      stepperposition(2);
+      StepperPosition(2);
     }
     YOutPoint = stepper2.currentPosition();
     display.clearDisplay();
