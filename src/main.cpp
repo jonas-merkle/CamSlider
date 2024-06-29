@@ -35,19 +35,19 @@
 // Defines //
 /////////////
 
-// Stepper
-#define STEPPER_X_STEP_PIN
-#define STEPPER_X_DIR_PIN
-#define STEPPER_X_STEP_PIN
-#define STEPPER_X_DIR_PIN
+// Stepper @ToDo
+#define STEPPER_X_STEP_PIN 1
+#define STEPPER_X_DIR_PIN 1
+#define STEPPER_Y_STEP_PIN 1
+#define STEPPER_Y_DIR_PIN 1
 
-// Limit Switch
-#define LIMIT_SWITCH_PIN
+// Limit Switch @ ToDo
+#define LIMIT_SWITCH_PIN 1
 
-// Rotary Encoder
-#define ROTARY_ENCODER_CLK_PIN
-#define ROTARY_ENCODER_DT_PIN
-#define ROTARY_ENCODER_SW_PIN
+// Rotary Encoder @ToDo
+#define ROTARY_ENCODER_CLK_PIN 1
+#define ROTARY_ENCODER_DT_PIN 1
+#define ROTARY_ENCODER_SW_PIN 1
 
 // OLED Display
 #define OLED_RESET_PIN 4
@@ -84,15 +84,15 @@ volatile boolean TurnDetected;
 volatile boolean rotationdirection;
 
 /*
-#define limitSwitch 11
-#define PinSW 2
-#define PinCLK 3
-#define PinDT 8
+#define LIMIT_SWITCH_PIN 11
+#define ROTARY_ENCODER_SW_PIN 2
+#define ROTARY_ENCODER_CLK_PIN 3
+#define ROTARY_ENCODER_DT_PIN 8
 #define OLED_RESET 4
-Adafruit_SSD1306 display(OLED_RESET);
+Adafruit_SSD1306 Display(OLED_RESET);
 
-AccelStepper stepper2(1, 7, 6); // (Type:driver, STEP, DIR)
-AccelStepper stepper1(1, 5, 4);
+AccelStepper StepperY(1, 7, 6); // (Type:driver, STEP, DIR)
+AccelStepper StepperX(1, 5, 4);
 
 MultiStepper StepperControl;
 */
@@ -127,25 +127,25 @@ void setup()
   pinMode(ROTARY_ENCODER_SW_PIN, INPUT_PULLUP);
   pinMode(ROTARY_ENCODER_CLK_PIN, INPUT_PULLUP);
   pinMode(ROTARY_ENCODER_DT_PIN, INPUT_PULLUP);
-  piMode(OLED_RESET_PIN, OUTPUT);
+  pinMode(OLED_RESET_PIN, OUTPUT);
 
   // Initialize Stepper Motors
-  stepper1.setMaxSpeed(3000);
-  stepper1.setSpeed(200);
-  stepper2.setMaxSpeed(3000);
-  stepper2.setSpeed(200);
-  StepperControl.addStepper(stepper1);
-  StepperControl.addStepper(stepper2);
+  StepperX.setMaxSpeed(3000);
+  StepperX.setSpeed(200);
+  StepperY.setMaxSpeed(3000);
+  StepperY.setSpeed(200);
+  StepperControl.addStepper(StepperX);
+  StepperControl.addStepper(StepperY);
 
   // Initialize OLED Display
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-  display.clearDisplay();
+  Display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  Display.clearDisplay();
 
-  // display Boot logo
-  display.drawBitmap(0, 0, CamSlider, 128, 64, 1);
-  display.display();
+  // Display Boot logo
+  Display.drawBitmap(0, 0, CamSlider, 128, 64, 1);
+  Display.display();
   delay(2000);
-  display.clearDisplay();
+  Display.clearDisplay();
 
   // Move into Home Position
   Home();
@@ -160,83 +160,83 @@ void loop() {
   // Begin Setup
   if (flag == 0)
   {
-    display.clearDisplay();
-    display.drawBitmap(0, 0, BeginSetup, 128, 64, 1);
-    display.display();
+    Display.clearDisplay();
+    Display.drawBitmap(0, 0, BeginSetup, 128, 64, 1);
+    Display.display();
     setspeed = 200;
   }
 
   // SetXin
   if (flag == 1)
   {
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setTextColor(WHITE);
-    display.setCursor(10, 28);
-    display.println("Set X In");
-    display.display();
+    Display.clearDisplay();
+    Display.setTextSize(2);
+    Display.setTextColor(WHITE);
+    Display.setCursor(10, 28);
+    Display.println("Set X In");
+    Display.display();
     while (flag == 1)
     {
       StepperPosition(1);
     }
-    XInPoint = stepper1.currentPosition();
+    XInPoint = StepperX.currentPosition();
   }
   // SetYin
   if (flag == 2)
   {
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setTextColor(WHITE);
-    display.setCursor(10, 28);
-    display.println("Set Y In");
-    display.display();
+    Display.clearDisplay();
+    Display.setTextSize(2);
+    Display.setTextColor(WHITE);
+    Display.setCursor(10, 28);
+    Display.println("Set Y In");
+    Display.display();
     while (flag == 2)
     {
       StepperPosition(2);
     }
-    stepper2.setCurrentPosition(0);
-    YInPoint = stepper2.currentPosition();
+    StepperY.setCurrentPosition(0);
+    YInPoint = StepperY.currentPosition();
   }
   // SetXout
   if (flag == 3)
   {
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setTextColor(WHITE);
-    display.setCursor(10, 28);
-    display.println("Set X Out");
-    display.display();
+    Display.clearDisplay();
+    Display.setTextSize(2);
+    Display.setTextColor(WHITE);
+    Display.setCursor(10, 28);
+    Display.println("Set X Out");
+    Display.display();
     while (flag == 3)
     {
       StepperPosition(1);
-      Serial.println(stepper1.currentPosition());
+      Serial.println(StepperX.currentPosition());
     }
-    XOutPoint = stepper1.currentPosition();
+    XOutPoint = StepperX.currentPosition();
   }
   // SetYout
   if (flag == 4)
   {
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setTextColor(WHITE);
-    display.setCursor(10, 28);
-    display.println("Set Y Out");
-    display.display();
+    Display.clearDisplay();
+    Display.setTextSize(2);
+    Display.setTextColor(WHITE);
+    Display.setCursor(10, 28);
+    Display.println("Set Y Out");
+    Display.display();
     while (flag == 4)
     {
       StepperPosition(2);
     }
-    YOutPoint = stepper2.currentPosition();
-    display.clearDisplay();
+    YOutPoint = StepperY.currentPosition();
+    Display.clearDisplay();
 
     // Go to IN position
     gotoposition[0] = XInPoint;
     gotoposition[1] = YInPoint;
-    display.clearDisplay();
-    display.setCursor(8, 28);
-    display.println(" Preview  ");
-    display.display();
-    stepper1.setMaxSpeed(3000);
+    Display.clearDisplay();
+    Display.setCursor(8, 28);
+    Display.println(" Preview  ");
+    Display.display();
+    StepperX.setMaxSpeed(3000);
     StepperControl.moveTo(gotoposition);
     StepperControl.runSpeedToPosition();
   }
@@ -244,32 +244,32 @@ void loop() {
   // Display Set Speed
   if (flag == 5)
   {
-    display.clearDisplay();
-    display.setCursor(8, 28);
-    display.println("Set Speed");
-    display.display();
+    Display.clearDisplay();
+    Display.setCursor(8, 28);
+    Display.println("Set Speed");
+    Display.display();
   }
   // Change Speed
   if (flag == 6)
   {
-    display.clearDisplay();
+    Display.clearDisplay();
     SetSpeed();
   }
   // DisplayStart
   if (flag == 7)
   {
-    display.clearDisplay();
-    display.setCursor(30, 27);
-    display.println("Start");
-    display.display();
+    Display.clearDisplay();
+    Display.setCursor(30, 27);
+    Display.println("Start");
+    Display.display();
   }
   // Start
   if (flag == 8)
   {
-    display.clearDisplay();
-    display.setCursor(20, 27);
-    display.println("Running");
-    display.display();
+    Display.clearDisplay();
+    Display.setCursor(20, 27);
+    Display.println("Running");
+    Display.display();
     Serial.println(XInPoint);
     Serial.println(XOutPoint);
     Serial.println(YInPoint);
@@ -277,7 +277,7 @@ void loop() {
 
     gotoposition[0] = XOutPoint;
     gotoposition[1] = YOutPoint;
-    stepper1.setMaxSpeed(setspeed);
+    StepperX.setMaxSpeed(setspeed);
     StepperControl.moveTo(gotoposition);
     StepperControl.runSpeedToPosition();
     flag = flag + 1;
@@ -285,15 +285,15 @@ void loop() {
   // Slide Finish
   if (flag == 9)
   {
-    display.clearDisplay();
-    display.setCursor(24, 26);
-    display.println("Finish");
-    display.display();
+    Display.clearDisplay();
+    Display.setCursor(24, 26);
+    Display.println("Finish");
+    Display.display();
   }
   // Return to start
   if (flag == 10)
   {
-    display.clearDisplay();
+    Display.clearDisplay();
     Home();
     flag = 0;
   }
@@ -316,46 +316,46 @@ void Switch()
 void Rotary()
 {
   delay(75);
-  if (digitalRead(PinCLK))
-    rotationdirection = digitalRead(PinDT);
+  if (digitalRead(ROTARY_ENCODER_CLK_PIN))
+    rotationdirection = digitalRead(ROTARY_ENCODER_DT_PIN);
   else
-    rotationdirection = !digitalRead(PinDT);
+    rotationdirection = !digitalRead(ROTARY_ENCODER_DT_PIN);
   TurnDetected = true;
   delay(75);
 }
 
 void Home()
 {
-  stepper1.setMaxSpeed(3000);
-  stepper1.setSpeed(200);
-  stepper2.setMaxSpeed(3000);
-  stepper2.setSpeed(200);
-  if (digitalRead(limitSwitch) == 1)
+  StepperX.setMaxSpeed(3000);
+  StepperX.setSpeed(200);
+  StepperY.setMaxSpeed(3000);
+  StepperY.setSpeed(200);
+  if (digitalRead(LIMIT_SWITCH_PIN) == 1)
   {
-    display.drawBitmap(0, 0, Homing, 128, 64, 1);
-    display.display();
+    Display.drawBitmap(0, 0, Homing, 128, 64, 1);
+    Display.display();
   }
 
-  while (digitalRead(limitSwitch) == 1)
+  while (digitalRead(LIMIT_SWITCH_PIN) == 1)
   {
-    stepper1.setSpeed(-3000);
-    stepper1.runSpeed();
+    StepperX.setSpeed(-3000);
+    StepperX.runSpeed();
   }
   delay(20);
-  stepper1.setCurrentPosition(0);
-  stepper1.moveTo(200);
-  while (stepper1.distanceToGo() != 0)
+  StepperX.setCurrentPosition(0);
+  StepperX.moveTo(200);
+  while (StepperX.distanceToGo() != 0)
   {
-    stepper1.setSpeed(3000);
-    stepper1.runSpeed();
+    StepperX.setSpeed(3000);
+    StepperX.runSpeed();
   }
-  stepper1.setCurrentPosition(0);
-  display.clearDisplay();
+  StepperX.setCurrentPosition(0);
+  Display.clearDisplay();
 }
 
 void SetSpeed()
 {
-  display.clearDisplay();
+  Display.clearDisplay();
   while (flag == 6)
   {
     if (TurnDetected)
@@ -374,15 +374,15 @@ void SetSpeed()
         }
       }
 
-      display.clearDisplay();
-      display.setTextSize(2);
-      display.setTextColor(WHITE);
-      display.setCursor(30, 0);
-      display.print("Speed");
+      Display.clearDisplay();
+      Display.setTextSize(2);
+      Display.setTextColor(WHITE);
+      Display.setCursor(30, 0);
+      Display.print("Speed");
       motorspeed = setspeed / 80;
-      display.setCursor(5, 16);
-      display.print(motorspeed);
-      display.print(" mm/s");
+      Display.setCursor(5, 16);
+      Display.print(motorspeed);
+      Display.print(" mm/s");
       totaldistance = XOutPoint - XInPoint;
       if (totaldistance < 0)
       {
@@ -393,30 +393,30 @@ void SetSpeed()
       }
       timeinsec = (totaldistance / setspeed);
       timeinmins = timeinsec / 60;
-      display.setCursor(35, 32);
-      display.print("Time");
-      display.setCursor(8, 48);
+      Display.setCursor(35, 32);
+      Display.print("Time");
+      Display.setCursor(8, 48);
       if (timeinmins > 1)
       {
-        display.print(timeinmins);
-        display.print(" min");
+        Display.print(timeinmins);
+        Display.print(" min");
       }
       else
       {
-        display.print(timeinsec);
-        display.print(" sec");
+        Display.print(timeinsec);
+        Display.print(" sec");
       }
-      display.display();
+      Display.display();
     }
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setTextColor(WHITE);
-    display.setCursor(30, 0);
-    display.print("Speed");
+    Display.clearDisplay();
+    Display.setTextSize(2);
+    Display.setTextColor(WHITE);
+    Display.setCursor(30, 0);
+    Display.print("Speed");
     motorspeed = setspeed / 80;
-    display.setCursor(5, 16);
-    display.print(motorspeed);
-    display.print(" mm/s");
+    Display.setCursor(5, 16);
+    Display.print(motorspeed);
+    Display.print(" mm/s");
     totaldistance = XOutPoint - XInPoint;
     if (totaldistance < 0)
     {
@@ -427,29 +427,29 @@ void SetSpeed()
     }
     timeinsec = (totaldistance / setspeed);
     timeinmins = timeinsec / 60;
-    display.setCursor(35, 32);
-    display.print("Time");
-    display.setCursor(8, 48);
+    Display.setCursor(35, 32);
+    Display.print("Time");
+    Display.setCursor(8, 48);
     if (timeinmins > 1)
     {
-      display.print(timeinmins);
-      display.print(" min");
+      Display.print(timeinmins);
+      Display.print(" min");
     }
     else
     {
-      display.print(timeinsec);
-      display.print(" sec");
+      Display.print(timeinsec);
+      Display.print(" sec");
     }
-    display.display();
+    Display.display();
   }
 }
 
 void StepperPosition(int n)
 {
-  stepper1.setMaxSpeed(3000);
-  stepper1.setSpeed(200);
-  stepper2.setMaxSpeed(3000);
-  stepper2.setSpeed(200);
+  StepperX.setMaxSpeed(3000);
+  StepperX.setSpeed(200);
+  StepperY.setMaxSpeed(3000);
+  StepperY.setSpeed(200);
   if (TurnDetected)
   {
     TurnDetected = false; // do NOT repeat IF loop until new rotation detected
@@ -457,42 +457,42 @@ void StepperPosition(int n)
     {
       if (!rotationdirection)
       {
-        if (stepper1.currentPosition() - 500 > 0)
+        if (StepperX.currentPosition() - 500 > 0)
         {
-          stepper1.move(-500);
-          while (stepper1.distanceToGo() != 0)
+          StepperX.move(-500);
+          while (StepperX.distanceToGo() != 0)
           {
-            stepper1.setSpeed(-3000);
-            stepper1.runSpeed();
+            StepperX.setSpeed(-3000);
+            StepperX.runSpeed();
           }
         }
         else
         {
-          while (stepper1.currentPosition() != 0)
+          while (StepperX.currentPosition() != 0)
           {
-            stepper1.setSpeed(-3000);
-            stepper1.runSpeed();
+            StepperX.setSpeed(-3000);
+            StepperX.runSpeed();
           }
         }
       }
 
       if (rotationdirection)
       {
-        if (stepper1.currentPosition() + 500 < 61000)
+        if (StepperX.currentPosition() + 500 < 61000)
         {
-          stepper1.move(500);
-          while (stepper1.distanceToGo() != 0)
+          StepperX.move(500);
+          while (StepperX.distanceToGo() != 0)
           {
-            stepper1.setSpeed(3000);
-            stepper1.runSpeed();
+            StepperX.setSpeed(3000);
+            StepperX.runSpeed();
           }
         }
         else
         {
-          while (stepper1.currentPosition() != 61000)
+          while (StepperX.currentPosition() != 61000)
           {
-            stepper1.setSpeed(3000);
-            stepper1.runSpeed();
+            StepperX.setSpeed(3000);
+            StepperX.runSpeed();
           }
         }
       }
@@ -501,20 +501,20 @@ void StepperPosition(int n)
     {
       if (rotationdirection)
       {
-        stepper2.move(-100);
-        while (stepper2.distanceToGo() != 0)
+        StepperY.move(-100);
+        while (StepperY.distanceToGo() != 0)
         {
-          stepper2.setSpeed(-3000);
-          stepper2.runSpeed();
+          StepperY.setSpeed(-3000);
+          StepperY.runSpeed();
         }
       }
       if (!rotationdirection)
       {
-        stepper2.move(100);
-        while (stepper2.distanceToGo() != 0)
+        StepperY.move(100);
+        while (StepperY.distanceToGo() != 0)
         {
-          stepper2.setSpeed(3000);
-          stepper2.runSpeed();
+          StepperY.setSpeed(3000);
+          StepperY.runSpeed();
         }
       }
     }
