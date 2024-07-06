@@ -340,7 +340,6 @@ void Rotary() {
     }
     // Remember last CLK state
     lastStateCLK = currentStateCLK;
-    delay(75);
 }
 
 void Home() {
@@ -481,16 +480,16 @@ void StepperPosition(int n) {
         }
         if (n == 2) {
             if (rotationdirection) {
-                StepperY.move(-100);
+                StepperY.move(-25);
                 while (StepperY.distanceToGo() != 0) {
-                    StepperY.setSpeed(-300);
+                    StepperY.setSpeed(-100);
                     StepperY.run();
                 }
             }
             if (!rotationdirection) {
-                StepperY.move(100);
+                StepperY.move(25);
                 while (StepperY.distanceToGo() != 0) {
-                    StepperY.setSpeed(300);
+                    StepperY.setSpeed(100);
                     StepperY.run();
                 }
             }
